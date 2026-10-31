@@ -8,6 +8,7 @@ Python 3.8 以降に対応し、外部ライブラリは不要です。使い方
 
 | 分類 | ファイル | 内容・計算量 |
 | --- | --- | --- |
+| 探索 | [binary_search.py](search/binary_search.py) | 整数のめぐる式二分探索。O(log(abs(ok - ng))) 回の判定 |
 | テンプレート | [template.py](template.py) | 標準入力の補助関数・英字定数 |
 | グラフ | [dijkstra.py](graph/dijkstra.py) | 非負の重みの最短路。O((V + E) log(V + E)) |
 | グラフ | [zero_one_bfs.py](graph/zero_one_bfs.py) | 重みが 0・1 の最短路。O(V + E) |
@@ -313,6 +314,26 @@ print(graph.flow(0, 3))           # 0
 `min_cut(s)` が最小カットを表すのは、最大流まで流し切った後です。`limit` で途中終了した場合は保証されません。
 無向辺は両方向の有向辺として追加してください。自己ループ・多重辺・逆向きの辺・容量 `0` にも対応しています。
 始点と終点が同じ場合、負の頂点数、負数や整数以外の容量・上限は `ValueError`、範囲外の頂点・辺番号は `IndexError` です。
+
+## 二分探索
+
+`binary_search(ok, ng, check)` は整数の境界を探し、条件を満たす側の `ok` を返します。
+`check(x)` は探索区間で真偽が一度だけ切り替わる単調な判定関数にしてください。
+初期値は成立側の `ok` と不成立側の `ng` を渡します。大小はどちら向きでも使えます。
+端点そのものは判定しないため、配列の外側を番兵として渡せます。
+該当する値がなければ初期の `ok` が返ります。整数専用です。
+
+```python
+# x * x <= 30 を満たす最大の整数
+answer = binary_search(0, 31, lambda x: x * x <= 30)  # 5
+
+# ソート済み配列で x 以上になる最初の位置。存在しなければ len(a)
+a = [1, 3, 3, 7]
+x = 3
+index = binary_search(len(a), -1, lambda i: a[i] >= x)  # 1
+```
+
+VS Code では `bsearch` で関数を展開できます。
 
 ## 動作確認
 
